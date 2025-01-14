@@ -1,0 +1,5 @@
+name = "analytics-sample-apis"
+main = "src/index.js"
+compatibility_date = "2025-1-14"
+
+compatibility_flags = [ "nodejs_compat" ]
