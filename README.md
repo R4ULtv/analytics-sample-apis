@@ -2,9 +2,6 @@
 
 A simple analytics API that provides mock data for click analytics and device statistics using Faker.js.
 
-## Base URL
-The API is built using Hono framework and includes CORS support.
-
 ## API Endpoints
 
 ### Click Analytics
