@@ -1,69 +1,105 @@
 # Analytics Sample APIs
 
-A simple analytics API built with Hono.js that generates sample time-series click data using Faker.js.
+A simple analytics API that provides mock data for click analytics and device statistics using Faker.js.
 
-## Overview
-
-This project provides a mock analytics API endpoint that generates synthetic click data over specified time intervals. It's useful for testing and development of analytics dashboards and visualization tools.
+## Base URL
+The API is built using Hono framework and includes CORS support.
 
 ## API Endpoints
 
 ### Click Analytics
+```http
+GET /analytics/clicks?from={value}&to={value}
 ```
-GET /analytics/clicks?interval={value}
-```
-
-Generates time-series click data for a specified time interval.
+Returns time-series click data for a specified date range.
 
 #### Query Parameters
-
-- `interval`: Time interval in the format `<number><unit>` where:
-  - `<number>`: A positive integer
-  - `<unit>`: One of:
-    - `h` (hours)
-    - `d` (days)
-    - `m` (months)
+- `from` (optional): Start date in ISO format
+- `to` (optional): End date in ISO format
 
 #### Constraints
-
-- Minimum interval: 12 hours
-- Maximum intervals:
-  - 90 days
-  - 3 months
+- Minimum date range: 12 hours
+- Maximum date range: 90 days
+- Returns 12 evenly spaced data points across the period
+- If dates are not provided, defaults to last 12 hours
 
 #### Response Format
-
-Returns an array of 12 evenly spaced data points across the specified interval.
-
 ```json
 [
   {
     "date": "2024-01-01T00:00:00.000Z",
-    "clicks": 123
-  },
-  ...
+    "clicks": 250
+  }
 ]
 ```
 
-#### Example Usage
+### Device Analytics
+```http
+GET /analytics/devices/:category
+```
+Returns click distribution data by device category.
 
-```bash
-# Get click data for last 24 hours
-GET /analytics/clicks?interval=24h
+#### Path Parameters
+- `category`: One of the following values:
+  - `device`: Device type distribution
+  - `browser`: Browser distribution
+  - `os`: Operating system distribution
 
-# Get click data for last 7 days
-GET /analytics/clicks?interval=7d
+#### Query Parameters
+- `from` (optional): Start date in ISO format
+- `to` (optional): End date in ISO format
 
-# Get click data for last 2 months
-GET /analytics/clicks?interval=2m
+#### Constraints
+- Maximum date range: 90 days
+- Minimum date range: 12 hours
+- If dates are not provided, defaults to last 12 hours
+
+#### Response Format
+Based on category:
+
+Device category:
+```json
+[
+  {
+    "device": "Desktop",
+    "clicks": 750
+  }
+]
 ```
 
-#### Error Responses
+Browser category:
+```json
+[
+  {
+    "browser": "Chrome",
+    "clicks": 850
+  }
+]
+```
 
-The API will return a 400 status code with an error message for:
-- Invalid interval format
-- Intervals below minimum threshold
-- Intervals exceeding maximum threshold
+OS category:
+```json
+[
+  {
+    "os": "Windows",
+    "clicks": 920
+  }
+]
+```
+
+## Error Responses
+The API returns appropriate error messages with 400 status code for:
+- Invalid date formats
+- Date range exceeding 90 days
+- Date range less than 12 hours
+- Invalid device category
+
+Error response format:
+```json
+{
+  "error": "Error message here"
+}
+```
 
 ## Technologies Used
 
