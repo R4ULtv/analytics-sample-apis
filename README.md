@@ -6,7 +6,7 @@ A simple analytics API that provides mock data for click analytics and device st
 
 ### Click Analytics
 ```http
-GET /analytics/clicks?from={value}&to={value}
+GET /analytics/clicks
 ```
 Returns time-series click data for a specified date range.
 
@@ -80,6 +80,40 @@ OS category:
   {
     "os": "Windows",
     "clicks": 920
+  }
+]
+```
+
+### Links Analytics
+```http
+GET /analytics/links
+```
+Returns a list of links with click analytics data, sorted by clicks in descending order.
+
+#### Response Format
+```json
+[
+  {
+    "domain": "shrly.cc",
+    "key": "abc123",
+    "url": "https://example.com",
+    "clicks": 500
+  }
+]
+```
+
+### Referrers Analytics
+```http
+GET /analytics/referrers
+```
+Returns a list of referring URLs with click analytics data, sorted by clicks in descending order.
+
+#### Response Format
+```json
+[
+  {
+    "url": "https://referrer.com",
+    "clicks": 150
   }
 ]
 ```
